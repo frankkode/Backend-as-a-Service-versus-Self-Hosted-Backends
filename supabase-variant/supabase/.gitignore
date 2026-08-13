@@ -1,0 +1,14 @@
+# Supabase
+.branches
+.temp
+
+# dotenvx
+.env.keys
+.env.local
+.env.*.local
+.env
+.venv/
+__pycache__/
+node_modules/
+*.pyc
+django-variant/.venv/

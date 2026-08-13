@@ -1,5 +1,4 @@
 import argparse, os, random, uuid
-import requests
 from dotenv import load_dotenv
 from faker import Faker
 
@@ -41,6 +40,8 @@ def generate(scenario, seed=42):
     return {"organisations": orgs, "users": users, "records": records}
 
 def load_supabase(data):
+    import requests  # imported here, not at module level, so the Django loader (which never calls
+                      # this function) doesn't need `requests` installed in its own environment
     base_url = os.environ["SUPABASE_URL"]
     key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
     rest_headers = {"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json"}

@@ -142,3 +142,9 @@ import dj_database_url
 DATABASES = {
     "default": dj_database_url.config(default="sqlite:///db.sqlite3")
 }
+
+from datetime import timedelta
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+}

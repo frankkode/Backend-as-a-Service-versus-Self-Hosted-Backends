@@ -1,1 +1,4 @@
 django-variant/django-variant/
+.env
+django-variant/.env
+.venv/

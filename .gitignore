@@ -1,4 +1,21 @@
 django-variant/django-variant/
-.env
 django-variant/.env
+.env.keys
+.env.local
+.env.*.local
+.env
 .venv/
+
+# Python bytecode / caches
+__pycache__/
+*.pyc
+.coverage
+.pytest_cache/
+
+# Supabase CLI local state (contains live project ref, org id, pooler host — do not publish)
+.temp/
+**/.temp/
+.branches/
+
+# OS junk
+.DS_Store

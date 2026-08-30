@@ -8,6 +8,8 @@ services:
     volumes: [pgdata:/var/lib/postgresql/data]
   web:
     build: .
+    environment:
+      - GUNICORN_WORKERS=${GUNICORN_WORKERS}
     env_file: .env
     depends_on: [db]
     volumes: ["../shared:/shared:ro", ".:/app"]

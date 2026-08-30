@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$vs(g=$fx(c!&m00k2^%mff$!kf5v2jae9r3u=@i-72w)65koa'
+# Read from the environment (see .env / scripts/set_env.sh) rather than hardcoded, since this
+# file is committed to a public repository. The fallback below is a clearly-marked dev-only
+# placeholder, not a real key; set DJANGO_SECRET_KEY before running anything beyond local benchmarking.
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-set-DJANGO_SECRET_KEY-in-your-env-do-not-use-this-default",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -134,9 +141,12 @@ REST_FRAMEWORK = {
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 AWS_STORAGE_BUCKET_NAME = "uploads"           # match the Supabase bucket name/region, §3.5 / §4.11
-AWS_S3_ENDPOINT_URL = "<your-s3-compatible-endpoint>"
-AWS_ACCESS_KEY_ID = "<key>"
-AWS_SECRET_ACCESS_KEY = "<secret>"
+# Read from the environment; unset in a fresh checkout until you configure real object storage
+# (see scripts/set_env.sh). File-upload endpoints will error until these are set — expected for a
+# benchmark reference app that doesn't ship with live storage credentials.
+AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", "")
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
 
 import dj_database_url
 DATABASES = {

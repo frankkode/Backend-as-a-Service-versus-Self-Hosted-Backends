@@ -1,0 +1,186 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.3, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/masabosimplicefrank/baas-vs-selfhosted/tests
+plugins: cov-7.1.0, anyio-4.12.0, django-4.7.0, Faker-37.4.2
+collected 12 items
+
+test_authorization.py FFFF                                               [ 33%]
+test_equivalence.py FFFF..FF                                             [100%]
+
+=================================== FAILURES ===================================
+______________ test_user_cannot_read_other_orgs_record[supabase] _______________
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_user_cannot_read_other_orgs_record(target):
+        """
+        Supabase (PostgREST) and Django express "you can't see this" differently, and both are
+        correct for their own model: PostgREST applies RLS as a row filter, so a blocked row simply
+        isn't in the result set (200, empty list). Django's get_queryset() filtering means the object
+        genuinely isn't found for this user, so DRF raises a real 404.
+        """
+        cfg = TARGETS[target]
+        if not cfg["other_org_record_id"]:
+            pytest.skip("other_org_record_id not set in .env yet")
+        headers = auth_headers(cfg, "user_a_token")
+        if target == "supabase":
+            r = httpx.get(f"{cfg['base_url']}/records?id=eq.{cfg['other_org_record_id']}&select=*", headers=headers)
+>           assert r.status_code == 200
+E           assert 401 == 200
+E            +  where 401 = <Response [401 Unauthorized]>.status_code
+
+test_authorization.py:18: AssertionError
+_______________ test_user_cannot_read_other_orgs_record[django] ________________
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_user_cannot_read_other_orgs_record(target):
+        """
+        Supabase (PostgREST) and Django express "you can't see this" differently, and both are
+        correct for their own model: PostgREST applies RLS as a row filter, so a blocked row simply
+        isn't in the result set (200, empty list). Django's get_queryset() filtering means the object
+        genuinely isn't found for this user, so DRF raises a real 404.
+        """
+        cfg = TARGETS[target]
+        if not cfg["other_org_record_id"]:
+            pytest.skip("other_org_record_id not set in .env yet")
+        headers = auth_headers(cfg, "user_a_token")
+        if target == "supabase":
+            r = httpx.get(f"{cfg['base_url']}/records?id=eq.{cfg['other_org_record_id']}&select=*", headers=headers)
+            assert r.status_code == 200
+            assert r.json() == []
+        else:
+            r = httpx.get(f"{cfg['base_url']}/records/{cfg['other_org_record_id']}/", headers=headers)
+>           assert r.status_code == 404
+E           assert 401 == 404
+E            +  where 401 = <Response [401 Unauthorized]>.status_code
+
+test_authorization.py:22: AssertionError
+_______________ test_list_never_leaks_other_orgs_rows[supabase] ________________
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_list_never_leaks_other_orgs_rows(target):
+        cfg = TARGETS[target]
+        r = httpx.get(endpoint(cfg, "records"), headers=auth_headers(cfg, "user_a_token"))
+>       assert r.status_code == 200
+E       assert 401 == 200
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+
+test_authorization.py:28: AssertionError
+________________ test_list_never_leaks_other_orgs_rows[django] _________________
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_list_never_leaks_other_orgs_rows(target):
+        cfg = TARGETS[target]
+        r = httpx.get(endpoint(cfg, "records"), headers=auth_headers(cfg, "user_a_token"))
+>       assert r.status_code == 200
+E       assert 401 == 200
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+
+test_authorization.py:28: AssertionError
+___________________ test_list_records_returns_200[supabase] ____________________
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_list_records_returns_200(target):
+        cfg = TARGETS[target]
+        r = httpx.get(endpoint(cfg, "records"), headers=auth_headers(cfg))
+>       assert r.status_code == 200
+E       assert 401 == 200
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+
+test_equivalence.py:8: AssertionError
+____________________ test_list_records_returns_200[django] _____________________
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_list_records_returns_200(target):
+        cfg = TARGETS[target]
+        r = httpx.get(endpoint(cfg, "records"), headers=auth_headers(cfg))
+>       assert r.status_code == 200
+E       assert 401 == 200
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+
+test_equivalence.py:8: AssertionError
+_________ test_create_record_returns_201_with_expected_shape[supabase] _________
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_create_record_returns_201_with_expected_shape(target):
+        cfg = TARGETS[target]
+        payload = {"status": "open", "payload": {}}
+        if target == "supabase":
+            payload["org_id"] = cfg["org_a_id"]
+        headers = auth_headers(cfg)
+        headers["Prefer"] = "return=representation"  # PostgREST defaults to an empty body otherwise
+        r = httpx.post(endpoint(cfg, "records"), json=payload, headers=headers)
+>       assert r.status_code in (200, 201)
+E       assert 401 in (200, 201)
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+
+test_equivalence.py:19: AssertionError
+__________ test_create_record_returns_201_with_expected_shape[django] __________
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_create_record_returns_201_with_expected_shape(target):
+        cfg = TARGETS[target]
+        payload = {"status": "open", "payload": {}}
+        if target == "supabase":
+            payload["org_id"] = cfg["org_a_id"]
+        headers = auth_headers(cfg)
+        headers["Prefer"] = "return=representation"  # PostgREST defaults to an empty body otherwise
+        r = httpx.post(endpoint(cfg, "records"), json=payload, headers=headers)
+>       assert r.status_code in (200, 201)
+E       assert 401 in (200, 201)
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+
+test_equivalence.py:19: AssertionError
+______________ test_report_view_returns_expected_fields[supabase] ______________
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_report_view_returns_expected_fields(target):
+        cfg = TARGETS[target]
+        r = httpx.get(endpoint(cfg, "report_view"), headers=auth_headers(cfg))
+>       assert r.status_code == 200
+E       assert 401 == 200
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+
+test_equivalence.py:38: AssertionError
+_______________ test_report_view_returns_expected_fields[django] _______________
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_report_view_returns_expected_fields(target):
+        cfg = TARGETS[target]
+        r = httpx.get(endpoint(cfg, "report_view"), headers=auth_headers(cfg))
+>       assert r.status_code == 200
+E       assert 401 == 200
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+
+test_equivalence.py:38: AssertionError
+=========================== short test summary info ============================
+FAILED test_authorization.py::test_user_cannot_read_other_orgs_record[supabase]
+FAILED test_authorization.py::test_user_cannot_read_other_orgs_record[django]
+FAILED test_authorization.py::test_list_never_leaks_other_orgs_rows[supabase]
+FAILED test_authorization.py::test_list_never_leaks_other_orgs_rows[django]
+FAILED test_equivalence.py::test_list_records_returns_200[supabase] - assert ...
+FAILED test_equivalence.py::test_list_records_returns_200[django] - assert 40...
+FAILED test_equivalence.py::test_create_record_returns_201_with_expected_shape[supabase]
+FAILED test_equivalence.py::test_create_record_returns_201_with_expected_shape[django]
+FAILED test_equivalence.py::test_report_view_returns_expected_fields[supabase]
+FAILED test_equivalence.py::test_report_view_returns_expected_fields[django]
+========================= 10 failed, 2 passed in 3.97s =========================

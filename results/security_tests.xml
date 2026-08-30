@@ -1,1 +1,1237 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="12" time="1.730" timestamp="2026-08-14T09:46:54.168355+03:00" hostname="Franks-MacBook-Pro.local"><testcase classname="test_equivalence" name="test_list_records_returns_200[supabase]" time="0.351" /><testcase classname="test_equivalence" name="test_list_records_returns_200[django]" time="0.037" /><testcase classname="test_equivalence" name="test_create_record_returns_201_with_expected_shape[supabase]" time="0.186" /><testcase classname="test_equivalence" name="test_create_record_returns_201_with_expected_shape[django]" time="0.037" /><testcase classname="test_equivalence" name="test_unauthenticated_request_is_rejected[supabase]" time="0.168" /><testcase classname="test_equivalence" name="test_unauthenticated_request_is_rejected[django]" time="0.017" /><testcase classname="test_equivalence" name="test_report_view_returns_expected_fields[supabase]" time="0.201" /><testcase classname="test_equivalence" name="test_report_view_returns_expected_fields[django]" time="0.035" /><testcase classname="test_authorization" name="test_user_cannot_read_other_orgs_record[supabase]" time="0.177" /><testcase classname="test_authorization" name="test_user_cannot_read_other_orgs_record[django]" time="0.033" /><testcase classname="test_authorization" name="test_list_never_leaks_other_orgs_rows[supabase]" time="0.181" /><testcase classname="test_authorization" name="test_list_never_leaks_other_orgs_rows[django]" time="0.036" /></testsuite></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="12" time="2.928" timestamp="2026-08-30T13:56:08.004740+03:00" hostname="Franks-MacBook-Pro.local"><testcase classname="test_equivalence" name="test_list_records_returns_200[supabase]" time="0.247"><failure message="httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_list_records_returns_200(target):
+        cfg = TARGETS[target]
+&gt;       r = httpx.get(endpoint(cfg, "records"), headers=auth_headers(cfg))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_equivalence.py:7: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:210: in get
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_equivalence" name="test_list_records_returns_200[django]" time="0.035"><failure message="httpx.ConnectError: [Errno 61] Connection refused">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_list_records_returns_200(target):
+        cfg = TARGETS[target]
+&gt;       r = httpx.get(endpoint(cfg, "records"), headers=auth_headers(cfg))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_equivalence.py:7: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:210: in get
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_equivalence" name="test_create_record_returns_201_with_expected_shape[supabase]" time="0.023"><failure message="httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_create_record_returns_201_with_expected_shape(target):
+        cfg = TARGETS[target]
+        payload = {"status": "open", "payload": {}}
+        if target == "supabase":
+            payload["org_id"] = cfg["org_a_id"]
+        headers = auth_headers(cfg)
+        headers["Prefer"] = "return=representation"  # PostgREST defaults to an empty body otherwise
+&gt;       r = httpx.post(endpoint(cfg, "records"), json=payload, headers=headers)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_equivalence.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:331: in post
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_equivalence" name="test_create_record_returns_201_with_expected_shape[django]" time="0.019"><failure message="httpx.ConnectError: [Errno 61] Connection refused">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_create_record_returns_201_with_expected_shape(target):
+        cfg = TARGETS[target]
+        payload = {"status": "open", "payload": {}}
+        if target == "supabase":
+            payload["org_id"] = cfg["org_a_id"]
+        headers = auth_headers(cfg)
+        headers["Prefer"] = "return=representation"  # PostgREST defaults to an empty body otherwise
+&gt;       r = httpx.post(endpoint(cfg, "records"), json=payload, headers=headers)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_equivalence.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:331: in post
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_equivalence" name="test_unauthenticated_request_is_rejected[supabase]" time="0.016"><failure message="httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_unauthenticated_request_is_rejected(target):
+        cfg = TARGETS[target]
+        headers = {"apikey": cfg["apikey"]} if cfg.get("apikey") else {}
+&gt;       r = httpx.get(endpoint(cfg, "records"), headers=headers)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_equivalence.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:210: in get
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_equivalence" name="test_unauthenticated_request_is_rejected[django]" time="0.017"><failure message="httpx.ConnectError: [Errno 61] Connection refused">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_unauthenticated_request_is_rejected(target):
+        cfg = TARGETS[target]
+        headers = {"apikey": cfg["apikey"]} if cfg.get("apikey") else {}
+&gt;       r = httpx.get(endpoint(cfg, "records"), headers=headers)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_equivalence.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:210: in get
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_equivalence" name="test_report_view_returns_expected_fields[supabase]" time="0.016"><failure message="httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_report_view_returns_expected_fields(target):
+        cfg = TARGETS[target]
+&gt;       r = httpx.get(endpoint(cfg, "report_view"), headers=auth_headers(cfg))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_equivalence.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:210: in get
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_equivalence" name="test_report_view_returns_expected_fields[django]" time="0.017"><failure message="httpx.ConnectError: [Errno 61] Connection refused">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_report_view_returns_expected_fields(target):
+        cfg = TARGETS[target]
+&gt;       r = httpx.get(endpoint(cfg, "report_view"), headers=auth_headers(cfg))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_equivalence.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:210: in get
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_authorization" name="test_user_cannot_read_other_orgs_record[supabase]" time="0.016"><failure message="httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_user_cannot_read_other_orgs_record(target):
+        """
+        Supabase (PostgREST) and Django express "you can't see this" differently, and both are
+        correct for their own model: PostgREST applies RLS as a row filter, so a blocked row simply
+        isn't in the result set (200, empty list). Django's get_queryset() filtering means the object
+        genuinely isn't found for this user, so DRF raises a real 404.
+        """
+        cfg = TARGETS[target]
+        if not cfg["other_org_record_id"]:
+            pytest.skip("other_org_record_id not set in .env yet")
+        headers = auth_headers(cfg, "user_a_token")
+        if target == "supabase":
+&gt;           r = httpx.get(f"{cfg['base_url']}/records?id=eq.{cfg['other_org_record_id']}&amp;select=*", headers=headers)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_authorization.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:210: in get
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_authorization" name="test_user_cannot_read_other_orgs_record[django]" time="0.016"><failure message="httpx.ConnectError: [Errno 61] Connection refused">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_user_cannot_read_other_orgs_record(target):
+        """
+        Supabase (PostgREST) and Django express "you can't see this" differently, and both are
+        correct for their own model: PostgREST applies RLS as a row filter, so a blocked row simply
+        isn't in the result set (200, empty list). Django's get_queryset() filtering means the object
+        genuinely isn't found for this user, so DRF raises a real 404.
+        """
+        cfg = TARGETS[target]
+        if not cfg["other_org_record_id"]:
+            pytest.skip("other_org_record_id not set in .env yet")
+        headers = auth_headers(cfg, "user_a_token")
+        if target == "supabase":
+            r = httpx.get(f"{cfg['base_url']}/records?id=eq.{cfg['other_org_record_id']}&amp;select=*", headers=headers)
+            assert r.status_code == 200
+            assert r.json() == []
+        else:
+&gt;           r = httpx.get(f"{cfg['base_url']}/records/{cfg['other_org_record_id']}/", headers=headers)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_authorization.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:210: in get
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_authorization" name="test_list_never_leaks_other_orgs_rows[supabase]" time="0.016"><failure message="httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'supabase'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_list_never_leaks_other_orgs_rows(target):
+        cfg = TARGETS[target]
+&gt;       r = httpx.get(endpoint(cfg, "records"), headers=auth_headers(cfg, "user_a_token"))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_authorization.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:210: in get
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 8] nodename nor servname provided, or not known
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase><testcase classname="test_authorization" name="test_list_never_leaks_other_orgs_rows[django]" time="0.018"><failure message="httpx.ConnectError: [Errno 61] Connection refused">@contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+&gt;           yield
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:236: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:101: in handle_request
+    raise exc
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:78: in handle_request
+    stream = self._connect(request)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_sync/connection.py:124: in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_backends/sync.py:207: in connect_tcp
+    with map_exceptions(exc_map):
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+map = {&lt;class 'TimeoutError'&gt;: &lt;class 'httpcore.ConnectTimeout'&gt;, &lt;class 'OSError'&gt;: &lt;class 'httpcore.ConnectError'&gt;}
+
+    @contextlib.contextmanager
+    def map_exceptions(map: ExceptionMapping) -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:  # noqa: PIE786
+            for from_exc, to_exc in map.items():
+                if isinstance(exc, from_exc):
+&gt;                   raise to_exc(exc) from exc
+E                   httpcore.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpcore/_exceptions.py:14: ConnectError
+
+The above exception was the direct cause of the following exception:
+
+target = 'django'
+
+    @pytest.mark.parametrize("target", TARGETS.keys())
+    def test_list_never_leaks_other_orgs_rows(target):
+        cfg = TARGETS[target]
+&gt;       r = httpx.get(endpoint(cfg, "records"), headers=auth_headers(cfg, "user_a_token"))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_authorization.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:210: in get
+    return request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_api.py:118: in request
+    return client.request(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:837: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:926: in send
+    response = self._send_handling_auth(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:954: in _send_handling_auth
+    response = self._send_handling_redirects(
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:991: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_client.py:1027: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:235: in handle_request
+    with map_httpcore_exceptions():
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/contextlib.py:155: in __exit__
+    self.gen.throw(typ, value, traceback)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    @contextlib.contextmanager
+    def map_httpcore_exceptions() -&gt; typing.Iterator[None]:
+        try:
+            yield
+        except Exception as exc:
+            mapped_exc = None
+    
+            for from_exc, to_exc in HTTPCORE_EXC_MAP.items():
+                if not isinstance(exc, from_exc):
+                    continue
+                # We want to map to the most specific exception we can find.
+                # Eg if `exc` is an `httpcore.ReadTimeout`, we want to map to
+                # `httpx.ReadTimeout`, not just `httpx.TimeoutException`.
+                if mapped_exc is None or issubclass(to_exc, mapped_exc):
+                    mapped_exc = to_exc
+    
+            if mapped_exc is None:  # pragma: no cover
+                raise
+    
+            message = str(exc)
+&gt;           raise mapped_exc(message) from exc
+E           httpx.ConnectError: [Errno 61] Connection refused
+
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/httpx/_transports/default.py:89: ConnectError</failure></testcase></testsuite></testsuites>

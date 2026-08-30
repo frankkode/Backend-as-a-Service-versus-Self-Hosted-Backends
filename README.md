@@ -1,10 +1,32 @@
 # BaaS vs Self-Hosted — Reference Application
 
+![Python](https://img.shields.io/badge/python-3.11-blue)
+![Django](https://img.shields.io/badge/django-4.2-0C4B33)
+![Supabase](https://img.shields.io/badge/supabase-postgres-3ECF8E)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
+
 Companion repository to the bachelor thesis **"Backend-as-a-Service versus Self-Hosted Backends: A
 Comparative Evaluation of Supabase and Django/PostgreSQL for Small-Business Web Platforms"** (IU
-International University of Applied Sciences, Frank Masabo, 2026). It contains both reference
-implementations, the benchmark and test tooling, and the raw evidence behind Chapter 5 and
-Appendices A–C of the thesis.
+International University of Applied Sciences, Frank Masabo, 2026).
+
+It contains two functionally-identical reference implementations of the same small-business web
+application — one built on Supabase, one self-hosted on Django/PostgreSQL — plus the benchmark and
+test tooling used to compare them, and the raw evidence behind Chapter 5 and Appendices A–C of the
+thesis.
+
+## Contents
+
+- [Architecture](#architecture)
+- [Data model](#data-model)
+- [Repository structure](#repository-structure)
+- [Prerequisites](#prerequisites)
+- [Setup](#setup)
+- [Testing](#testing)
+- [Benchmark](#benchmark)
+- [Results at a glance](#results-at-a-glance)
+- [Reproducibility notes](#reproducibility-notes)
+- [Security note](#security-note)
+- [License](#license)
 
 ## Architecture
 
@@ -46,7 +68,7 @@ through their own migration tooling (Supabase SQL migrations vs. Django's migrat
 
 - Python 3.11, Docker and Docker Compose (Django variant)
 - [Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) (Supabase variant)
-- [k6](https://k6.io/docs/get-started/installation/) (benchmark)
+- [k6](https://k6.io/docs/get-started/installation/) (benchmark only)
 - A Supabase project (free tier is sufficient) and a VPS or local Docker host for the Django variant
 
 ## Setup
@@ -54,7 +76,7 @@ through their own migration tooling (Supabase SQL migrations vs. Django's migrat
 Both variants read secrets and configuration from a local `.env` file, which is git-ignored and
 never committed. Use `scripts/set_env.sh KEY value` to populate it, or edit it directly.
 
-**Supabase variant**
+**1. Supabase variant**
 
 ```bash
 cd supabase-variant
@@ -62,7 +84,7 @@ supabase link --project-ref <your-project-ref>
 supabase db push          # applies migrations 0001-0003 in order
 ```
 
-**Django variant**
+**2. Django variant**
 
 ```bash
 cd django-variant
@@ -75,25 +97,51 @@ docker compose up -d
 `AWS_SECRET_ACCESS_KEY` from the environment; a fresh checkout will run without them, but
 file-upload endpoints won't work until real object-storage credentials are set.
 
-**Seed identical synthetic data into both**
+**3. Seed identical synthetic data into both**
 
 ```bash
 python shared/data-generator/seed.py --scenario small   # or growing / peak, matching Table 3.3
 ```
 
-## Running the tests and benchmark
+**4. Root `.env`, for the cross-variant tests and benchmark below** — copy `.env.example` to
+`.env` and fill in `SUPABASE_URL`, `SUPABASE_USER_JWT`, `SUPABASE_TEST_ORG_ID`,
+`SUPABASE_ANON_KEY`, `DJANGO_BASE_URL`, `DJANGO_USER_JWT`, `DJANGO_TEST_ORG_ID` — see
+`Platform_Build_Guide.md` (in the thesis repository) for exact credential-retrieval and
+JWT-minting steps for both variants.
+
+## Testing
+
+There are two independent test suites — one needs nothing beyond Docker, the other needs Setup
+step 4 above completed first.
+
+**Unit tests — no external setup required.** Self-contained: mocked, own throwaway test DB.
+
+```bash
+docker compose -f django-variant/docker-compose.yml run --rm web python manage.py test core
+```
+
+**Integration tests — requires the root `.env` from Setup step 4.** These make live HTTP calls
+against both running variants and assert identical behaviour (API shape, RLS/permission
+enforcement). Without a populated `.env` they fail immediately at import (`KeyError`), not a
+graceful skip.
 
 ```bash
 cd tests && pytest test_equivalence.py test_authorization.py -v --junitxml=../results/security_tests.xml
-docker compose -f django-variant/docker-compose.yml run --rm web python manage.py test core
+```
 
+## Benchmark
+
+Also requires the root `.env` from Setup step 4, plus [k6](https://k6.io/docs/get-started/installation/) installed.
+
+```bash
 k6 run --summary-export=results/<target>_<profile>_<vus>_rep<n>.json \
   -e BASE_URL="$BASE_URL" -e AUTH_TOKEN="$AUTH_TOKEN" -e PROFILE=<profile> -e VUS=<vus> \
   shared/k6/workload.js
 ```
 
-See `Platform_Build_Guide.md` (in the thesis repository) for the full annotated walkthrough this
-was built from, including exact credential-retrieval and JWT-minting steps for both variants.
+`<target>` is `supabase` or `django`; `<profile>` is `read-heavy`, `write-heavy` or `mixed`;
+`<vus>` is the concurrency level (10 / 50 / 200 in the thesis, Table 3.1). See
+`Platform_Build_Guide.md` for the full driver loop that produced all 54 files in `results/`.
 
 ## Results at a glance
 
@@ -127,7 +175,7 @@ D.1).</sub></td>
 - The k6 result files in `results/` are the three raw repetitions per configuration; Table 5.1
   reports the min–max range across them, not a single point estimate, since several
   high-concurrency configurations show substantial inter-repetition variance (documented in
-  Section 5.1 and `Defense_Arguments.md`).
+  Section 5.1).
 - Both variants are seeded from the same fixed random seed (`shared/data-generator/seed.py`), so
   re-running the seed step reproduces identical Organisation/User/Record/File Upload rows on both
   sides.

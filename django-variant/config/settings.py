@@ -30,9 +30,20 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Read from the environment so the same image can serve local development and a real deployment.
+# DEBUG must be False for any benchmark run that is meant to represent production behaviour:
+# with DEBUG=True Django retains every executed SQL query in connection.queries for the life of
+# the process, which both slows request handling and grows memory monotonically under sustained
+# load -- a measurement artifact, not an architectural property of the stack.
+DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() in ("1", "true", "yes")
 
-ALLOWED_HOSTS = []
+# Comma-separated list, e.g. ALLOWED_HOSTS=203.0.113.10,srv123.hstgr.cloud
+# Defaults to localhost so a fresh checkout still runs locally without configuration.
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    if h.strip()
+]
 
 
 # Application definition

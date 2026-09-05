@@ -1,8 +1,32 @@
 #!/usr/bin/env bash
 # Batched hands-on checks for the criteria catalog (Section 7).
-# Read-only / non-destructive — safe to run against your seeded data.
+#
+# NOT read-only. This script deliberately writes, because several criteria can only be settled by
+# observing how each variant responds to a write. Specifically it:
+#   - POSTs an empty payload and an oversized payload to each variant (checks 6 and 7), which on a
+#     permissive variant creates up to two records per side;
+#   - issues 20 failed logins per variant (check 4), which is intended to trip a rate limiter and
+#     may leave the account or source IP throttled for a few minutes;
+#   - calls Supabase logout (check 9), which invalidates SUPABASE_USER_JWT.
+# None of that is destructive, but do not run it against a dataset that is mid-benchmark. Reset to
+# the fixed baseline afterwards:  python3 scripts/reset_data.py --rows 2000
+#
+# Both DJANGO_USER_JWT and SUPABASE_USER_JWT must be current (Django 24 h, Supabase 60 min) or every
+# authenticated check returns 401 and the output is meaningless.
+#
 # Run from the repo root: bash criteria_hands_on_checks.sh
 set -a; source .env; set +a
+
+# Derive the Django origin from DJANGO_BASE_URL instead of assuming localhost. This script was first
+# written while the variant ran on the local machine; it is now deployed to a VPS, and a hardcoded
+# localhost would silently measure whatever happens to be listening on the operator own machine
+# rather than the system under test.
+DJANGO_ORIGIN="$(printf '%s' "$DJANGO_BASE_URL" | sed -E 's#^(https?://[^/]+).*#\1#')"
+if [ -z "$DJANGO_ORIGIN" ]; then
+  echo "ERROR: could not derive an origin from DJANGO_BASE_URL=$DJANGO_BASE_URL"; exit 1
+fi
+echo "Django origin under test : $DJANGO_ORIGIN"
+echo "Django API base under test: $DJANGO_BASE_URL"
 
 hr() { echo; echo "===== $1 ====="; }
 
@@ -60,7 +84,7 @@ echo "-- Supabase (implicit — no custom health endpoint expected, platform-man
 curl -s -o /dev/null -w "root: HTTP %{http_code}\n" "$SUPABASE_URL"
 echo "-- Django (checking common paths) --"
 for path in /health /healthz /api/health /api/health/; do
-  echo -n "$path: "; curl -s -o /dev/null -w "HTTP %{http_code}\n" "http://localhost$path"
+  echo -n "$path: "; curl -s -o /dev/null -w "HTTP %{http_code}\n" "$DJANGO_ORIGIN$path"
 done
 
 hr "9. LOGOUT / TOKEN INVALIDATION (sign out, then try reusing the old token)"

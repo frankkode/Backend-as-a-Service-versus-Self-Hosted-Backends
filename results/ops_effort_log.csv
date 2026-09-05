@@ -1,0 +1,2 @@
+variant,task_id,started_at,ended_at,duration_seconds,duration_minutes,note
+supabase,os_patching,2026-08-31 11:07:30,2026-08-31 11:07:30,0,0.00,N/A - platform-managed

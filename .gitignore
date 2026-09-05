@@ -19,3 +19,29 @@ __pycache__/
 
 # OS junk
 .DS_Store
+
+# ops-effort measurement scratch state
+.ops_timer/
+
+# Working backups taken before destructive edits. These are local safety copies, not artifacts:
+# publishing them would put superseded data next to the corrected data and invite an examiner to
+# read the wrong file.
+*.bak
+*.pre_run3_bak
+
+# Machine-specific operational runbook: contains the live host address and root SSH steps for one
+# server. The reproducible procedure is published in DEPLOY_AND_MEASURE.md, which is genericised.
+DEPLOY_srv*.md
+
+# Private working material: defence notes, self-report worksheets, supervisor correspondence,
+# screenshots staged for the thesis. These are the author's own preparation, not research artifacts,
+# and must never be swept up by `git add -A`.
+Defense_Arguments*
+defence*.md
+*self-report*
+*self_report*
+*worksheet*
+*supervisor*
+screenshots/
+*_private.*
+*_PRIVATE.*

@@ -17,17 +17,37 @@ Conditions:
 | Django `DEBUG` | **False** |
 | Supabase | Free tier project, AWS **eu-west-2 (London)** |
 | Load generator | Author's macOS machine, single location, k6 |
-| Co-tenant | An unrelated production stack on the same VPS was **stopped** for the whole sweep, so Django had the full 2 vCPU |
+| Co-tenant | **Correction:** an unrelated stack on the same VPS was **running** for the whole sweep. Container start timestamps put all three of its containers up at 18:13:59 UTC on 2026-09-03; the first result file was written at 19:07:15 UTC and the last at 21:09:29 UTC. Django therefore shared the 2 vCPU throughout. An earlier version of this file stated the opposite, from recollection rather than from the host. |
 | Dataset | **2,000 records reset before every repetition** (72 resets) via `scripts/reset_data.py` |
 | Token handling | Supabase JWT re-minted before each configuration (60 min expiry vs ~2 h sweep) |
 
 Data quality: 54/54 files contain real request data; error rates 0.0% everywhere except
 read-heavy 200 VU (≤0.1%). No configuration hit the k6 timeout ceiling.
 
-Measured network asymmetry (`results/rtt_measurement.txt`): median TCP connect 58.9 ms to the
-Frankfurt VPS vs 25.8 ms to Supabase London — a **33 ms residual gap that disadvantages the
-self-hosted variant**. Immaterial at 50/200 VU where latencies are in the hundreds/thousands of ms;
-comparable to the effect size only at 10 VU.
+### Three asymmetries, and they do not all point the same way
+
+1. **Network path**, against Django. Median TCP connect 58.9 ms to the Frankfurt VPS against 25.8 ms
+   to Supabase London: a 33 ms residual gap (`results/rtt_measurement.txt`). Immaterial at 50 and
+   200 VUs; comparable to the effect size at 10 VUs.
+2. **Host contention**, against Django. The co-tenant above. Direction known, magnitude not: the
+   competing stack was never instrumented, so how much CPU it took during those 122 minutes cannot
+   be recovered.
+3. **Compute allocation**, against Supabase, and larger than either of the above. The managed
+   variant ran on the **Free tier**, which the provider allocates a Nano instance: shared CPU and up
+   to 0.5 GB of memory. The self-hosted variant ran on a Hostinger KVM 2: two dedicated vCPUs and
+   8 GB. Roughly sixteen times the memory, and dedicated rather than shared CPU.
+
+The net effect is therefore not uniform, and the earlier version of this file was wrong to say it
+was. Reading Table 5.1:
+
+- Where **Django wins** (read-heavy and mixed, 50 and 200 VUs), the win accrues to the
+  better-resourced side. It cannot be attributed to architecture on this evidence and is the weaker
+  claim.
+- Where **Supabase wins** (write-heavy), the win was obtained on the Nano instance in spite of the
+  resource gap, and is correspondingly the firmer one.
+
+A replication on matched compute, or on a paid Supabase tier, with the co-tenant stopped, is what
+would settle it. This matches Sections 3.6, 5.1 and 6.1 of the thesis.
 
 ## Run 2 — DISCARDED (`results/vps_run_no_reset/`)
 

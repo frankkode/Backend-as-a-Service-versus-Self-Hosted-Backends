@@ -1,0 +1,31 @@
+Hand-written backend logic, counted as non-blank, non-comment lines
+(docstring-only lines excluded on the Python side).
+
+Supabase, SQL migrations : 112 lines, 4 files
+  0001_init.sql                34
+  0002_rls.sql                 19
+  0003_auth_trigger.sql        10
+  0004_fixes.sql               49
+
+Django, application Python: 275 lines, 14 files
+  config/__init__.py            0
+  config/asgi.py                4
+  config/settings.py           94
+  config/urls.py                6
+  config/wsgi.py                4
+  core/authentication.py       10
+  core/models.py               26
+  core/permissions.py          12
+  core/serializers.py          17
+  core/tests.py                20
+  core/urls.py                 13
+  core/views.py                38
+  core/views_auth.py           16
+  manage.py                    15
+
+Reduction: 59% fewer hand-written lines on the Supabase side.
+
+The earlier cloc totals (204 vs 343) summed all file types, including 140 lines
+of Supabase CLI TOML configuration and, on the Django side, requirements.txt,
+docker-compose.yml and the Dockerfile. Those totals are not a like-for-like
+comparison of hand-written backend logic and are superseded by this file.

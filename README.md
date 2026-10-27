@@ -7,7 +7,7 @@
 
 Companion repository to the bachelor thesis **"Backend-as-a-Service versus Self-Hosted Backends: A
 Comparative Evaluation of Supabase and Django/PostgreSQL for Small-Business Web Platforms"** (IU
-International University of Applied Sciences, Frank Masabo, 2026).
+International University of Applied Sciences, Frank Masabo).
 
 It contains two functionally-identical reference implementations of the same small-business web
 application — one built on Supabase, one self-hosted on Django/PostgreSQL — plus the benchmark and
